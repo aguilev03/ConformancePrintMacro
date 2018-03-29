@@ -28,22 +28,28 @@ def createNew() :
 # starts excel and open new editable file 
 def startProg(var) :
     os.startfile(var)
-    
+
+# loads the function to convert list of scans into formatted printable item   
 def loadxcl() :
    
     wb = openpyxl.load_workbook(newFileName, read_only=False, keep_vba=True)
     sheet = wb['Scan']
     sheet2 = wb['CofC']
 
+    #function to remove prefixes or suffixes and check for blank cells
     def splitStr(a, b, c) :
-        prefixStr = sheet[a].value.split()
-        sheet2[b] = prefixStr[c]
+        if sheet[a].value is None :
+            prefixStr = " "
+        else:
+            prefixStr = sheet[a].value.split()
+            sheet2[b] = prefixStr[c]
         
 
-    
+    # adds model number based on first program
     splitStr('A1','D6',0)
     sheet2['J6']= today.strftime("%m/%d/%Y")
     
+    # for loop to get data in list on scan page 
     for x in range(50) :
         y = 'A' + str(x+1)
            
@@ -62,22 +68,31 @@ def loadxcl() :
         else: 
             d = 'J' + str(x - 30)
             splitStr(y,d,1)
-            
+
+    #saves the file        
     wb.save(newFileName)
 
+#function to print the page
 def printxcl() :
+    
+    #function for multi button press
     def mpress(x,y) :
         pyautogui.keyDown(x)
         pyautogui.press(y)
         pyautogui.keyUp(x)
         time.sleep(2)
         return
-
+    #macro start to print the page by utilizing built in excel workbook macro
     time.sleep(5)
     mpress('ctrl','t')
     time.sleep(30)
     mpress('ctrl', 'p')
+    pyautogui.press('enter')
+    time.sleep(5)
+    mpress('alt','f4')
+    pyautogui.press('enter')
 
+# process of functions
 createNew()
 startProg(newFileName)
 pausesys = input("Press Enter after you finish scanning to continue")
