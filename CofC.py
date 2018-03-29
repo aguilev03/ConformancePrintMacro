@@ -85,7 +85,7 @@ def printxcl() :
     #macro start to print the page by utilizing built in excel workbook macro
     time.sleep(5)
     mpress('ctrl','t')
-    time.sleep(30)
+    time.sleep(10)
     mpress('ctrl', 'p')
     pyautogui.press('enter')
     time.sleep(5)
